@@ -79,3 +79,22 @@ The dashboard is built around 6 pages, each with a clear executive objective —
 
 **Reporting features planned:** navigation/bookmarks, custom tooltip pages, dynamic titles, conditional formatting, row-level security by region
 
+---
+
+## About Me
+
+**[Anurag Bhardwaj]**
+Aspiring Data Analyst | SQL · Power BI · Data Modeling · ETL
+
+This project was built end-to-end as a portfolio piece to demonstrate the full analytics lifecycle — business framing, data modeling, SQL-based ETL, and BI development — rather than just dashboard creation.
+
+📧 [your.email@example.com](mailto:your.email@example.com) · 💼 [LinkedIn](https://linkedin.com/in/yourprofile) · 🖥️ [GitHub](https://github.com/AnnyB1234)
+
+---
+
+## License
+
+This project is licensed under the MIT License — see [`LICENSE`](LICENSE) for details.
+
+> Note: this repository uses a synthetically generated dataset built to simulate a realistic fleet maintenance business scenario. It does not represent any real company's data.
+
