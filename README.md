@@ -38,7 +38,6 @@ Finance has flagged that maintenance spend is rising year-over-year while fleet 
 |---|---|
 | Fleet size | 2,200 vehicles |
 | Regions | 6 (U.S.) |
-| Tables | 18 (9 dimensions, 2 bridges, 7 facts) |
 | Raw rows | 432,127 across all 18 source CSVs |
 | Time span | 2023–2026 |
 
