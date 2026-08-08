@@ -1,7 +1,6 @@
 /* =============================================================
    SHOPKART — BRONZE LAYER DDL
    Raw source tables, loaded as-is from CRM / ERP / Payment Gateway (PG) /
-   Returns Management (RM) / Marketing source systems (MKT). 
 
    Script Purpose:
     This script creates tables in the 'bronze' schema, dropping existing tables 
@@ -121,11 +120,11 @@ GO
 -- =============================================================
 -- 6. PaymentGateway.Payments
 -- =============================================================
-IF OBJECT_ID('bronze.paymentgateway_payments', 'U') IS NOT NULL
-    DROP TABLE bronze.paymentgateway_payments;
+IF OBJECT_ID('bronze.pg_payments', 'U') IS NOT NULL
+    DROP TABLE bronze.pg_payments;
 GO
 
-CREATE TABLE bronze.paymentgateway_payments (
+CREATE TABLE bronze.pg_payments (
     payment_id               NVARCHAR(30),
     order_id                NVARCHAR(30),
     payment_date              NVARCHAR(30),
@@ -141,11 +140,11 @@ GO
 -- =============================================================
 -- 7. Returns.Returns
 -- =============================================================
-IF OBJECT_ID('bronze.returns_returns', 'U') IS NOT NULL
-    DROP TABLE bronze.returns_returns;
+IF OBJECT_ID('bronze.rms_returns', 'U') IS NOT NULL
+    DROP TABLE bronze.rms_returns;
 GO
 
-CREATE TABLE bronze.returns_returns (
+CREATE TABLE bronze.rms_returns (
     return_id                NVARCHAR(30),
     order_id                NVARCHAR(30),
     order_item_id             NVARCHAR(30),
@@ -162,11 +161,11 @@ GO
 -- =============================================================
 -- 8. Marketing.Promotions
 -- =============================================================
-IF OBJECT_ID('bronze.marketing_promotions', 'U') IS NOT NULL
-    DROP TABLE bronze.marketing_promotions;
+IF OBJECT_ID('bronze.mkt_promotions', 'U') IS NOT NULL
+    DROP TABLE bronze.mkt_promotions;
 GO
 
-CREATE TABLE bronze.marketing_promotions (
+CREATE TABLE bronze.mkt_promotions (
     promotion_id             NVARCHAR(30),
     promotion_name             NVARCHAR(150),
     promotion_type             NVARCHAR(50),
