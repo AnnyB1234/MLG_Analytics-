@@ -66,6 +66,8 @@ The project integrates data from **5 operational source systems**.
 
 # 🥉 Bronze Layer
 
+<img width="1284" height="246" alt="image" src="https://github.com/user-attachments/assets/070c4c41-20e3-482a-9de8-45ce7ca2a061" />
+
 The Bronze layer stores data as received from the source systems.
 
 The objective is to preserve the original source data while maintaining source lineage.
