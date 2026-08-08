@@ -1,258 +1,183 @@
-/*
-===============================================================================
-DDL Script: Create Bronze Tables
-===============================================================================
-Script Purpose:
+/* =============================================================
+   SHOPKART — BRONZE LAYER DDL
+   Raw source tables, loaded as-is from CRM / ERP / Payment Gateway (PG) /
+   Returns Management (RM) / Marketing source systems (MKT). 
+
+   Script Purpose:
     This script creates tables in the 'bronze' schema, dropping existing tables 
     if they already exist.
 	  Run this script to re-define the DDL structure of 'bronze' Tables
 ===============================================================================
 */
 
-IF OBJECT_ID ('bronze.crd_region', 'U') IS NOT NULL 
-    DROP TABLE bronze.crd_region;
+-- =============================================================
+-- 1. CRM.Customers
+-- =============================================================
+IF OBJECT_ID('bronze.crm_customers', 'U') IS NOT NULL
+    DROP TABLE bronze.crm_customers;
 GO
-CREATE TABLE bronze.crd_region (
-    region_id       VARCHAR(50),
-    region_name     VARCHAR(200),
-    region_manager  VARCHAR(200)
+
+CREATE TABLE bronze.crm_customers (
+    customer_id             VARCHAR(20),
+    customer_name           VARCHAR(150),
+    gender                  VARCHAR(20),
+    date_of_birth           VARCHAR(30),
+    email                   VARCHAR(150),
+    phone                   VARCHAR(30),
+    city                    VARCHAR(100),
+    state                   VARCHAR(100),
+    pincode                 VARCHAR(20),
+    signup_date             VARCHAR(30),
+    customer_type           VARCHAR(30),
+    acquisition_channel     VARCHAR(50),
+    customer_status         VARCHAR(30)
 );
 GO
 
-IF OBJECT_ID ('bronze.vms_vendor', 'U') IS NOT NULL 
-    DROP TABLE bronze.vms_vendor;
+-- =============================================================
+-- 2. ERP.Products
+-- =============================================================
+IF OBJECT_ID('bronze.erp_products', 'U') IS NOT NULL
+    DROP TABLE bronze.erp_products;
 GO
-  
-CREATE TABLE bronze.vms_vendor (
-    vendor_id            VARCHAR(50),
-    vendor_name          VARCHAR(300),
-    vendor_type          VARCHAR(100),
-    region_id            VARCHAR(50),
-    contact_email        VARCHAR(200),
-    is_active             VARCHAR(20),   -- mixed boolean encodings
-    contract_start_date  VARCHAR(50)    -- mixed date formats
-);
-GO
-IF OBJECT_ID ('bronze.cmms_part', 'U') IS NOT NULL 
-    DROP TABLE  bronze.cmms_part;
-GO
-CREATE TABLE bronze.cmms_part (
-    part_number     VARCHAR(50),
-    part_name       VARCHAR(300),
-    part_category   VARCHAR(100),
-    oem_flag        VARCHAR(20),
-    standard_cost   VARCHAR(50),        -- occasionally "$1,364.32"
-    supplier_id     VARCHAR(50)
-);
-GO
-IF OBJECT_ID ('bronze.tms_iot_fault_code', 'U') IS NOT NULL 
-    DROP TABLE bronze.tms_iot_fault_code;
-GO
-CREATE TABLE bronze.tms_iot_fault_code (
-    fault_code            VARCHAR(20),
-    fault_description     VARCHAR(500),
-    component_category    VARCHAR(100),
-    severity_level        VARCHAR(50),
-    is_safety_critical    VARCHAR(20)
-);
-GO
-IF OBJECT_ID ('bronze.oem_warranty_term', 'U') IS NOT NULL 
-    DROP TABLE bronze.oem_warranty_term;
-GO
-CREATE TABLE bronze.oem_warranty_term (
-    make                    VARCHAR(100),
-    component_category      VARCHAR(100),
-    coverage_months         VARCHAR(20),
-    effective_start_date    VARCHAR(50),
-    effective_end_date      VARCHAR(50),
-    is_current              VARCHAR(20)
-);
-GO
-IF OBJECT_ID ('bronze.tms_route', 'U') IS NOT NULL 
-    DROP TABLE bronze.tms_route;
-GO
-CREATE TABLE bronze.tms_route (
-    route_id                VARCHAR(50),
-    route_name              VARCHAR(300),
-    origin_city             VARCHAR(200),
-    destination_city        VARCHAR(200),
-    planned_distance_km     VARCHAR(50),
-    region_id               VARCHAR(50),
-    is_active                VARCHAR(20)
-);
-GO
-IF OBJECT_ID ('bronze.hris_driver', 'U') IS NOT NULL 
-    DROP TABLE bronze.hris_driver;
-GO
-CREATE TABLE bronze.hris_driver (
-    driver_id            VARCHAR(50),
-    driver_name          VARCHAR(300),
-    license_number       VARCHAR(50),
-    license_class        VARCHAR(50),
-    hire_date            VARCHAR(50),
-    employment_status    VARCHAR(50),
-    region_id            VARCHAR(50)
-);
-GO
-IF OBJECT_ID ('bronze.fms_vehicle', 'U') IS NOT NULL 
-    DROP TABLE bronze.fms_vehicle;
-GO
-CREATE TABLE bronze.fms_vehicle (
-    vin                VARCHAR(50),
-    vehicle_id         VARCHAR(50),
-    make               VARCHAR(100),
-    model              VARCHAR(100),
-    year               VARCHAR(20),
-    vehicle_class      VARCHAR(100),
-    purchase_date      VARCHAR(50),
-    initial_mileage    VARCHAR(50),
-    is_current          VARCHAR(20),
-    region_id          VARCHAR(50)
-);
-GO
--- BRIDGE SOURCES (SCD2)
 
-IF OBJECT_ID ('bronze.fms_vehicle_driver_assignment', 'U') IS NOT NULL 
-    DROP TABLE bronze.fms_vehicle_driver_assignment;
-GO
-CREATE TABLE bronze.fms_vehicle_driver_assignment (
-    vehicle_vin              VARCHAR(50),
-    driver_id                VARCHAR(50),
-    assignment_start_date    VARCHAR(50),
-    assignment_end_date      VARCHAR(50),
-    is_current                VARCHAR(20)
+CREATE TABLE bronze.erp_products (
+    product_id              VARCHAR(20),
+    product_name            VARCHAR(200),
+    category                VARCHAR(100),
+    subcategory             VARCHAR(100),
+    brand                   VARCHAR(100),
+    unit_cost               VARCHAR(30),
+    selling_price           VARCHAR(30),
+    supplier_id              VARCHAR(30),
+    launch_date             VARCHAR(30),
+    product_status          VARCHAR(30)
 );
 GO
 
-IF OBJECT_ID ('bronze.vms_vehicle_vendor_contract ', 'U') IS NOT NULL 
-    DROP TABLE bronze.vms_vehicle_vendor_contract ;
-
+-- =============================================================
+-- 3. ERP.Orders
+-- =============================================================
+IF OBJECT_ID('bronze.erp_orders', 'U') IS NOT NULL
+    DROP TABLE bronze.erp_orders;
 GO
-CREATE TABLE bronze.vms_vehicle_vendor_contract (
-    vehicle_vin            VARCHAR(50),
-    vendor_id              VARCHAR(50),
-    contract_start_date    VARCHAR(50),
-    contract_end_date      VARCHAR(50),
-    contract_type          VARCHAR(50),
-    is_active               VARCHAR(20)
+
+CREATE TABLE bronze.erp_orders (
+    order_id                VARCHAR(30),
+    customer_id             VARCHAR(20),
+    order_date               VARCHAR(30),
+    order_status             VARCHAR(30),
+    shipping_city             VARCHAR(100),
+    shipping_state             VARCHAR(100),
+    shipping_pincode             VARCHAR(20),
+    region_id                VARCHAR(20),
+    payment_method           VARCHAR(50),
+    promotion_id             VARCHAR(30),
+    shipping_fee             VARCHAR(30),
+    order_total               VARCHAR(30),
+    order_channel             VARCHAR(30),
+    shipping_method             VARCHAR(50),
+    expected_delivery_date             VARCHAR(30),
+    actual_delivery_date             VARCHAR(30)
 );
 GO
 
--- FACT SOURCES
-
-
-IF OBJECT_ID ('bronze.cmms_work_order ', 'U') IS NOT NULL 
-    DROP TABLE bronze.cmms_work_order ;
+-- =============================================================
+-- 4. ERP.Order_Items
+-- =============================================================
+IF OBJECT_ID('bronze.erp_order_items', 'U') IS NOT NULL
+    DROP TABLE bronze.erp_order_items;
 GO
-CREATE TABLE bronze.cmms_work_order (
-    workorder_id                    VARCHAR(50),
-    vehicle_vin                     VARCHAR(50),
-    vendor_id                       VARCHAR(50),
-    workorder_date                  VARCHAR(50),
-    warranty_component_category     VARCHAR(100),
-    vehicle_make                    VARCHAR(100),
-    work_order_type                 VARCHAR(50),
-    labor_hours                     VARCHAR(50),
-    labor_cost                      VARCHAR(50),
-    part_cost                       VARCHAR(50),
-    total_cost                      VARCHAR(50),
-    warranty_claimed_flag           VARCHAR(20),
-    warranty_claim_status           VARCHAR(50),
-    warranty_rejection_reason       VARCHAR(300)
+
+CREATE TABLE bronze.erp_order_items (
+    order_item_id           NVARCHAR(30),
+    order_id                NVARCHAR(30),
+    product_id              NVARCHAR(20),
+    quantity                 NVARCHAR(20),
+    unit_price               NVARCHAR(30),
+    unit_cost               NVARCHAR(30),
+    discount_percentage             NVARCHAR(20),
+    discount_amount             NVARCHAR(30),
+    line_total               NVARCHAR(30)
 );
 GO
 
-IF OBJECT_ID ('bronze.cmms_parts_usage', 'U') IS NOT NULL 
-    DROP TABLE bronze.cmms_parts_usage ;
+-- =============================================================
+-- 5. ERP.Regions
+-- =============================================================
+IF OBJECT_ID('bronze.erp_regions', 'U') IS NOT NULL
+    DROP TABLE bronze.erp_regions;
 GO
-CREATE TABLE bronze.cmms_parts_usage (
-    workorder_id             VARCHAR(50),
-    part_number              VARCHAR(50),
-    vehicle_vin              VARCHAR(50),
-    usage_date               VARCHAR(50),
-    quantity_used             VARCHAR(50),
-    unit_cost                VARCHAR(50),
-    total_parts_cost         VARCHAR(50),
-    warranty_covered_flag    VARCHAR(20)
-);
-GO
-IF OBJECT_ID ('bronze.oem_warranty_claim', 'U') IS NOT NULL 
-    DROP TABLE bronze.oem_warranty_claim ;
-GO
-CREATE TABLE bronze.oem_warranty_claim (
-    claim_number               VARCHAR(50),
-    workorder_id               VARCHAR(50),
-    vehicle_vin                VARCHAR(50),
-    vendor_id                  VARCHAR(50),
-    claim_submitted_date       VARCHAR(50),
-    claim_amount_requested     VARCHAR(50),
-    claim_amount_approved      VARCHAR(50),
-    claim_status                VARCHAR(50),
-    rejection_reason           VARCHAR(300),
-    processing_days            VARCHAR(50)
-);
 
-GO
-IF OBJECT_ID ('bronze.tms_iot_telematics_fault_event', 'U') IS NOT NULL 
-    DROP TABLE bronze.tms_iot_telematics_fault_event;
-GO
-CREATE TABLE bronze.tms_iot_telematics_fault_event (
-    vehicle_vin        VARCHAR(50),
-    fault_code         VARCHAR(20),
-    driver_id          VARCHAR(50),
-    route_id           VARCHAR(50),
-    event_timestamp    VARCHAR(50),
-    vehicle_mileage    VARCHAR(50),
-    severity_level     VARCHAR(50),
-    fault_status       VARCHAR(50)
+CREATE TABLE bronze.erp_regions (
+    region_id                NVARCHAR(20),
+    region_name               NVARCHAR(50),
+    state                    NVARCHAR(100),
+    city                     NVARCHAR(100),
+    warehouse_id             NVARCHAR(30)
 );
 GO
-IF OBJECT_ID ('bronze.cmms_downtime', 'U') IS NOT NULL 
-    DROP TABLE bronze.cmms_downtime;
-GO
-CREATE TABLE bronze.cmms_downtime (
-    vehicle_vin        VARCHAR(50),
-    workorder_id       VARCHAR(50),
-    vendor_id          VARCHAR(50),
-    downtime_start     VARCHAR(50),
-    downtime_end       VARCHAR(50),
-    downtime_hours     VARCHAR(50),
-    downtime_reason    VARCHAR(200),
-    is_planned          VARCHAR(20)
-);
 
+-- =============================================================
+-- 6. PaymentGateway.Payments
+-- =============================================================
+IF OBJECT_ID('bronze.paymentgateway_payments', 'U') IS NOT NULL
+    DROP TABLE bronze.paymentgateway_payments;
 GO
-IF OBJECT_ID ('bronze.tms_delivery_performance', 'U') IS NOT NULL 
-    DROP TABLE bronze.tms_delivery_performance;
-GO
-CREATE TABLE bronze.tms_delivery_performance (
-    delivery_id                        VARCHAR(50),
-    route_id                           VARCHAR(50),
-    vehicle_vin                        VARCHAR(50),
-    driver_id                          VARCHAR(50),
-    delivery_date                      VARCHAR(50),
-    planned_distance_km                VARCHAR(50),
-    actual_distance_km                 VARCHAR(50),
-    planned_delivery_time_minutes      VARCHAR(50),
-    actual_delivery_time_minutes       VARCHAR(50),
-    on_time_flag                        VARCHAR(20),
-    fuel_consumed_liters               VARCHAR(50)
-);
 
-GO
-IF OBJECT_ID ('bronze.fcs_fuel_transaction', 'U') IS NOT NULL 
-    DROP TABLE bronze.fcs_fuel_transaction;
-GO
-CREATE TABLE bronze.fcs_fuel_transaction (
-    fuel_transaction_id      VARCHAR(50),
-    vehicle_vin              VARCHAR(50),
-    driver_id                VARCHAR(50),
-    vendor_id                VARCHAR(50),
-    transaction_date         VARCHAR(50),
-    fuel_type                VARCHAR(50),
-    fuel_quantity_liters     VARCHAR(50),
-    fuel_cost                VARCHAR(50),
-    vehicle_mileage          VARCHAR(50),
-    fuel_efficiency_kmpl     VARCHAR(50)
+CREATE TABLE bronze.paymentgateway_payments (
+    payment_id               NVARCHAR(30),
+    order_id                NVARCHAR(30),
+    payment_date              NVARCHAR(30),
+    payment_method           NVARCHAR(50),
+    payment_status             NVARCHAR(30),
+    transaction_reference             NVARCHAR(100),
+    amount                   NVARCHAR(30),
+    refund_amount             NVARCHAR(30),
+    payment_gateway             NVARCHAR(50)
 );
 GO
+
+-- =============================================================
+-- 7. Returns.Returns
+-- =============================================================
+IF OBJECT_ID('bronze.returns_returns', 'U') IS NOT NULL
+    DROP TABLE bronze.returns_returns;
+GO
+
+CREATE TABLE bronze.returns_returns (
+    return_id                NVARCHAR(30),
+    order_id                NVARCHAR(30),
+    order_item_id             NVARCHAR(30),
+    product_id               NVARCHAR(20),
+    return_date               NVARCHAR(30),
+    return_quantity             NVARCHAR(20),
+    return_reason             NVARCHAR(100),
+    return_status             NVARCHAR(30),
+    refund_amount             NVARCHAR(30),
+    condition                NVARCHAR(50)
+);
+GO
+
+-- =============================================================
+-- 8. Marketing.Promotions
+-- =============================================================
+IF OBJECT_ID('bronze.marketing_promotions', 'U') IS NOT NULL
+    DROP TABLE bronze.marketing_promotions;
+GO
+
+CREATE TABLE bronze.marketing_promotions (
+    promotion_id             NVARCHAR(30),
+    promotion_name             NVARCHAR(150),
+    promotion_type             NVARCHAR(50),
+    discount_percentage             NVARCHAR(20),
+    start_date               NVARCHAR(30),
+    end_date                NVARCHAR(30),
+    minimum_order_value             NVARCHAR(30),
+    maximum_discount             NVARCHAR(30),
+    promotion_status             NVARCHAR(30),
+    campaign_channel             NVARCHAR(50),
+    marketing_spend             NVARCHAR(30)
+);
+GO
+
