@@ -385,42 +385,9 @@ ShopKart/
 
 ---
 
-# 🎯 Project Objective
+## 🛡️ License
 
-The final solution demonstrates how a Data Analyst / Analytics Engineer can transform fragmented operational data into a centralized analytical platform.
-
-The project combines:
-
-**Data Engineering**
-
-→ Source ingestion
-
-→ Data profiling
-
-→ ETL
-
-→ Data quality
-
-→ Data warehousing
-
-**Data Analytics**
-
-→ SQL analytics
-
-→ KPI development
-
-→ RFM segmentation
-
-→ Customer analysis
-
-**Business Intelligence**
-
-→ Power BI dashboards
-
-→ Interactive reporting
-
-→ Business insights
-
-The final objective is to enable ShopKart's stakeholders to make **data-driven decisions around sales, customers, products, profitability, marketing, returns, payments, and retention.**
+This project is licensed under the [MIT License](LICENSE). You are free to use, modify, and share this project with proper attribution.
 
 ---
+
