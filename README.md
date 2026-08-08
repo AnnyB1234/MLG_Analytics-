@@ -67,6 +67,8 @@ The project integrates data from **5 operational source systems**.
 # 🥉 Bronze Layer
 
 <img width="1088" height="221" alt="image" src="https://github.com/user-attachments/assets/7afdd5c7-3d11-494e-be5e-14e89cbc8bb0" />
+---
+<img width="1047" height="362" alt="image" src="https://github.com/user-attachments/assets/e32acfc6-709e-403f-96e1-abb1e9ab61f2" />
 
 The Bronze layer stores data as received from the source systems.
 
