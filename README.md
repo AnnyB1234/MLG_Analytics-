@@ -52,26 +52,6 @@ The project integrates data from **5 operational source systems**.
 | Returns Management System        | Returns                                |
 | Marketing System                 | Promotions                             |
 
-### Source Architecture
-
-CRM
- └── Customers
-
-ERP
- ├── Products
- ├── Orders
- ├── Order_Items
- └── Regions
-
-PG
- └── Payments
-
-RMS
- └── Returns
-
-MKT
- └── Promotions
-
 ---
 
 ## 🏗️ Data Architecture
