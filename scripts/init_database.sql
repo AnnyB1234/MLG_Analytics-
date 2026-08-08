@@ -16,7 +16,7 @@ WARNING:
 USE master;
 GO
 
--- Drop and recreate the 'meridian_logistics_dwh' database
+-- Drop and recreate the 'ShopKartDW' database
 IF EXISTS (SELECT 1 FROM sys.databases WHERE name = 'ShopKartDW')
 BEGIN
     ALTER DATABASE ShopKartDW SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
@@ -24,7 +24,7 @@ BEGIN
 END;
 GO
 
--- Create the 'meridian_logistics_dwh' database
+-- Create the 'ShopKartDW' database
 CREATE DATABASE ShopKartDW;
 GO                                 ------- Go: Separate batches when working with multiple SQL statements
 
