@@ -93,6 +93,8 @@ No major business transformation is performed at this stage.
 
 # 🥈 Silver Layer
 
+<img width="1092" height="325" alt="image" src="https://github.com/user-attachments/assets/6482ef85-1e94-4dda-a479-21693eac5e2b" />
+
 The Silver layer contains cleaned, standardized, and validated data.
 
 Typical transformations include:
