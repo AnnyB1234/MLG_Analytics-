@@ -7,6 +7,9 @@ Script Purpose:
     It performs the following actions:
     - Truncates the bronze tables before loading data.
     - Uses the `BULK INSERT` command to load data from csv Files to bronze tables.
+    - Wraps the full load in a single transaction: all 8 tables load successfully
+      and commit together, or any single failure rolls the entire batch back,
+      leaving Bronze exactly as it was before the procedure ran.
 
 Parameters:
     None. 
@@ -29,6 +32,8 @@ BEGIN
             @batch_end_time   DATETIME;
 
         SET @batch_start_time = GETDATE();
+
+        BEGIN TRANSACTION;
 
         PRINT '===============================================';
         PRINT 'Loading Bronze Layer';
@@ -56,6 +61,7 @@ BEGIN
         WITH
         (
             FIRSTROW        = 2,
+            FORMAT          = 'CSV',
             FIELDTERMINATOR = ',',
             ROWTERMINATOR   = '0x0a',
             FIELDQUOTE      = '"',
@@ -93,6 +99,7 @@ BEGIN
         WITH
         (
             FIRSTROW        = 2,
+            FORMAT          = 'CSV',
             FIELDTERMINATOR = ',',
             ROWTERMINATOR   = '0x0a',
             FIELDQUOTE      = '"',
@@ -130,6 +137,7 @@ BEGIN
         WITH
         (
             FIRSTROW        = 2,
+            FORMAT          = 'CSV',
             FIELDTERMINATOR = ',',
             ROWTERMINATOR   = '0x0a',
             FIELDQUOTE      = '"',
@@ -167,6 +175,7 @@ BEGIN
         WITH
         (
             FIRSTROW        = 2,
+            FORMAT          = 'CSV',
             FIELDTERMINATOR = ',',
             ROWTERMINATOR   = '0x0a',
             FIELDQUOTE      = '"',
@@ -204,6 +213,7 @@ BEGIN
         WITH
         (
             FIRSTROW        = 2,
+            FORMAT          = 'CSV',
             FIELDTERMINATOR = ',',
             ROWTERMINATOR   = '0x0a',
             FIELDQUOTE      = '"',
@@ -241,6 +251,7 @@ BEGIN
         WITH
         (
             FIRSTROW        = 2,
+            FORMAT          = 'CSV',
             FIELDTERMINATOR = ',',
             ROWTERMINATOR   = '0x0a',
             FIELDQUOTE      = '"',
@@ -278,6 +289,7 @@ BEGIN
         WITH
         (
             FIRSTROW        = 2,
+            FORMAT          = 'CSV',
             FIELDTERMINATOR = ',',
             ROWTERMINATOR   = '0x0a',
             FIELDQUOTE      = '"',
@@ -315,6 +327,7 @@ BEGIN
         WITH
         (
             FIRSTROW        = 2,
+            FORMAT          = 'CSV',
             FIELDTERMINATOR = ',',
             ROWTERMINATOR   = '0x0a',
             FIELDQUOTE      = '"',
@@ -335,6 +348,8 @@ BEGIN
            Batch Completion
            ============================================================= */
 
+        COMMIT TRANSACTION;
+
         SET @batch_end_time = GETDATE();
 
         PRINT '===============================================';
@@ -349,6 +364,9 @@ BEGIN
 
 
     BEGIN CATCH
+
+        IF @@TRANCOUNT > 0
+            ROLLBACK TRANSACTION;
 
         PRINT '===================================================';
         PRINT 'ERROR OCCURRED DURING LOADING BRONZE LAYER';
