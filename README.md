@@ -116,6 +116,8 @@ Records that fail critical validation rules can be separated into a **quarantine
 
 # 🥇 Gold Layer
 
+<img width="1054" height="366" alt="image" src="https://github.com/user-attachments/assets/920ba74b-9091-4c39-96cd-3c01f2ada955" />
+
 The Gold layer is designed for analytical consumption.
 
 The cleaned Silver data is transformed into a business-friendly dimensional model containing:
